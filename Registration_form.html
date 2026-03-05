@@ -16,32 +16,30 @@
 </form>
 
 <script>
-document.getElementById("registerForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+const apiUrl = "https://mini-backend-1-wv48.onrender.com/api/users/";
 
-    fetch("https://mini-backend-1-wv48.onrender.com/api/register/", {
+document.getElementById("registerForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        username: form.username.value,
+        email: form.email.value,
+        password: form.password.value
+    };
+
+    const res = await fetch(apiUrl, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: document.getElementById("username").value,
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            alert("Registration successful");
-        } else {
-            alert(data.error || "Registration failed");
-        }
-    })
-    .catch(error => {
-        alert("Server connection failed");
-        console.error(error);
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(data)
     });
+
+    if(res.ok){
+        alert("Registration successful!");
+        window.location.href = "login_form.html";
+    } else {
+        const err = await res.json();
+        alert("Registration failed: " + JSON.stringify(err));
+    }
 });
 </script>
 
