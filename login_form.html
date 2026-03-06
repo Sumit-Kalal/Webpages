@@ -10,7 +10,7 @@
 
     <form id="loginForm">
         <label>Username:</label>
-        <input type="text" name="username" required><br>
+        <input type="text" id="username" name="username" required><br>
         <label>Password:</label>
         <input type="password" name="password" required><br>
         <button type="submit">Login</button>
@@ -30,30 +30,37 @@
         <a href="index.html">Dashboard</a>
     </p>
 <script>
-const tokenUrl = "https://mini-backend-1-wv48.onrender.com/api/token/";
-
-document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    const form = e.target;
-    const data = {
-        username: form.username.value,
-        password: form.password.value
-    };
 
-    const res = await fetch(tokenUrl, {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch("https://mini-backend-1-wv48.onrender.com/login/", {
         method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify(data)
-    });
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    })
+    .then(async response => {
+    const data = await response.json();
+    if(!response.ok) throw data;
+    return data;
+})
+    .then(data => {
+        console.log(data);
 
-    const result = await res.json();
-    if(result.access){
-        localStorage.setItem("token", result.access);
-        alert("Login successful!");
-        window.location.href = "user_list.html";
-    } else {
-        alert("Login failed: Wrong credentials");
-    }
+        if(data.access){
+            alert("Login successful");
+        }else{
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error(error));
 });
 </script>
 </body>
