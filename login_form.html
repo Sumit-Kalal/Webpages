@@ -48,17 +48,20 @@
         })
         .then(async response => {
         const data = await response.json();
-        if(!response.ok) throw data;
+        if(!response.ok) {
+            alert(data.error || "Login failed");
+            return;
+        };
         return data;
     })
         .then(data => {
+            if(!data) return;
             console.log(data);
 
             if(data.access){
+                localStorage.setItem("access_token", data.access);
                 alert("Login successful");
                 window.location.href="user_list.html";
-            }else{
-                alert(data.error);
             }
         })
         .catch(error => console.error(error));
