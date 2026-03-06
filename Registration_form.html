@@ -55,30 +55,26 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
         })
 
     })
+.then(async response => {
 
-    .then(async response => {
-    const data = await response.json();
-    if(!response.ok) throw data;
-    return data;
-})
+    const text = await response.text();
+try{
+        const data = JSON.parse(text);
 
-    .then(data => {
-
-        console.log(data);
-
-        if(data.message){
-            alert("Registration successful");
-            window.location.href = "login_form.html";
-        }
-        else{
-            alert(data.error);
+        if(!response.ok){
+            alert(data.error || "Registration failed");
+            return;
         }
 
-    })
+        alert("Registration successful");
+        window.location.href="login_form.html";
 
-    .catch(error => console.error(error));
+    }catch{
+        console.error("Server returned HTML instead of JSON:", text);
+        alert("Server error occurred");
+    }
 
-});
+});});
 </script>
 </body>
 </html>
