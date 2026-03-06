@@ -1,68 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Page</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
-<body>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Login Page</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
 
-    <h2>Login</h2>
+        <h2>Login</h2>
 
-    <form id="loginForm">
-        <label>Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label>Password:</label>
-        <input type="password" id="password" name="password" required><br>
-        <button type="submit">Login</button>
-    </form>
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label>Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <button type="submit">Login</button>
+        </form>
 
-    <p>Don't have an account? 
-        <a href="Registration_form.html">Register here</a>  
-    </p>
-    <br><br>
+        <p>Don't have an account? 
+            <a href="Registration_form.html">Register here</a>  
+        </p>
+        <br><br>
 
-    <p>See registered users 
-        <a href="user_list.html">Registered Users</a>
-    </p>
-    <br><br>
+        <p>See registered users 
+            <a href="user_list.html">Registered Users</a>
+        </p>
+        <br><br>
 
-    <p>Back to home 
-        <a href="index.html">Dashboard</a>
-    </p>
-<script>
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+        <p>Back to home 
+            <a href="index.html">Dashboard</a>
+        </p>
+    <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-    fetch("https://mini-backend-1-wv48.onrender.com/login/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
+        fetch("https://mini-backend-1-wv48.onrender.com/api/login/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         })
+        .then(async response => {
+        const data = await response.json();
+        if(!response.ok) throw data;
+        return data;
     })
-    .then(async response => {
-    const data = await response.json();
-    if(!response.ok) throw data;
-    return data;
-})
-    .then(data => {
-        console.log(data);
+        .then(data => {
+            console.log(data);
 
-        if(data.access){
-            alert("Login successful");
-            window.location.href="index.html";
-        }else{
-            alert(data.error);
-        }
-    })
-    .catch(error => console.error(error));
-});
-</script>
-</body>
-</html>
+            if(data.access){
+                alert("Login successful");
+                window.location.href="index.html";
+            }else{
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error(error));
+    });
+    </script>
+    </body>
+    </html>
