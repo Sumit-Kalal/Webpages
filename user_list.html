@@ -29,7 +29,6 @@
 
 <br>
 <a href="index.html">Back to Dashboard</a>
-
 <script>
 
 const token = localStorage.getItem("access_token");
@@ -50,15 +49,10 @@ headers:{
 .then(data => {
 
 const table = document.getElementById("userTable");
-table.innerHTML = "";   // FIX: clears table before inserting rows
 
-if(!Array.isArray(data)){
-    console.error("Unexpected response:", data);
-    alert("Unable to load users");
-    return;
-}
+const users = data.results ? data.results : data;
 
-data.forEach(user => {
+users.forEach(user => {
 
 table.innerHTML += `
 <tr>
@@ -67,15 +61,8 @@ table.innerHTML += `
 <td>${user.email}</td>
 
 <td>
-
-<button onclick="editUser(${user.id})">
-Edit
-</button>
-
-<button onclick="deleteUser(${user.id})">
-Delete
-</button>
-
+<button onclick="editUser(${user.id})">Edit</button>
+<button onclick="deleteUser(${user.id})">Delete</button>
 </td>
 
 </tr>
@@ -86,11 +73,9 @@ Delete
 })
 .catch(error => console.error(error));
 
-
 function editUser(id){
 window.location.href = "edit_entry.html?id=" + id;
 }
-
 
 function deleteUser(id){
 
@@ -104,19 +89,15 @@ headers:{
 })
 
 .then(response => {
-
 if(response.ok){
 alert("User deleted");
 location.reload();
-}
-else{
+}else{
 alert("Delete failed");
 }
-
 });
 
 }
-
 
 function logout(){
 localStorage.removeItem("access_token");
