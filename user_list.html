@@ -73,31 +73,6 @@ table.innerHTML += `
 })
 .catch(error => console.error(error));
 
-function editUser(id){
-window.location.href = "edit_entry.html?id=" + id;
-}
-
-function deleteUser(id){
-
-if(!confirm("Delete this user?")) return;
-
-fetch("https://mini-backend-1-wv48.onrender.com/api/users/"+id+"/",{
-method:"DELETE",
-headers:{
-"Authorization":"Bearer " + token
-}
-})
-
-.then(response => {
-if(response.ok){
-alert("User deleted");
-location.reload();
-}else{
-alert("Delete failed");
-}
-});
-
-}
 
 function logout(){
 localStorage.removeItem("access_token");
